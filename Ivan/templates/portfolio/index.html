@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Portfolio Home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient text-white py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold mb-3">Welcome to My Portfolio</h1>
+                {% if about %}
+                <p class="lead mb-4">{{ about.bio|truncatewords:30 }}</p>
+                <div class="d-flex gap-3">
+                    {% if about.resume_link %}
+                    <a href="{{ about.resume_link }}" class="btn btn-light btn-lg" target="_blank">
+                        <i class="fas fa-download"></i> Download Resume
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'portfolio:projects' %}" class="btn btn-outline-light btn-lg">
+                        View Projects
+                    </a>
+                </div>
+                {% else %}
+                <p class="lead mb-4">Showcasing my best work and skills</p>
+                <a href="{% url 'portfolio:projects' %}" class="btn btn-light btn-lg">
+                    View Projects
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Featured Projects</h2>
+        {% if projects %}
+        <div class="row">
+            {% for project in projects|slice:":3" %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm hover-card">
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-briefcase text-secondary" style="font-size: 3rem;"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ project.title }}</h5>
+                        <p class="card-text text-muted">{{ project.description|truncatewords:15 }}</p>
+                        {% if project.technologies %}
+                        <div class="mb-3">
+                            <span class="badge bg-info">{{ project.technologies }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'portfolio:project_detail' project.id %}" class="btn btn-sm btn-primary">
+                            View Details
+                        </a>
+                        {% if project.github_link %}
+                        <a href="{{ project.github_link }}" class="btn btn-sm btn-outline-dark" target="_blank">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'portfolio:projects' %}" class="btn btn-primary btn-lg">View All Projects</a>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">No projects added yet.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Skills Preview -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Skills</h2>
+        {% if skills %}
+        <div class="row">
+            {% regroup skills by category as skills_by_category %}
+            {% for category in skills_by_category %}
+            <div class="col-md-6 mb-4">
+                <h5 class="mb-3">{{ category.grouper }}</h5>
+                {% for skill in category.list|slice:":5" %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{{ skill.name }}</span>
+                        <span class="text-muted">{{ skill.proficiency_percentage }}%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: {{ skill.proficiency_percentage }}%" 
+                             aria-valuenow="{{ skill.proficiency_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'portfolio:skills' %}" class="btn btn-primary">View All Skills</a>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">No skills added yet.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- About Section -->
+{% if about %}
+<section class="py-5" id="about">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="mb-4">{{ about.title }}</h2>
+                <p class="lead">{{ about.bio }}</p>
+                
+                <div class="row mt-4">
+                    {% if about.email %}
+                    <div class="col-md-6 mb-3">
+                        <strong><i class="fas fa-envelope"></i> Email:</strong>
+                        <a href="mailto:{{ about.email }}">{{ about.email }}</a>
+                    </div>
+                    {% endif %}
+                    {% if about.phone %}
+                    <div class="col-md-6 mb-3">
+                        <strong><i class="fas fa-phone"></i> Phone:</strong>
+                        {{ about.phone }}
+                    </div>
+                    {% endif %}
+                    {% if about.location %}
+                    <div class="col-md-6 mb-3">
+                        <strong><i class="fas fa-map-marker-alt"></i> Location:</strong>
+                        {{ about.location }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-4">
+                    {% if about.github_profile %}
+                    <a href="{{ about.github_profile }}" class="btn btn-outline-dark me-2" target="_blank">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    {% endif %}
+                    {% if about.linkedin_profile %}
+                    <a href="{{ about.linkedin_profile }}" class="btn btn-outline-info me-2" target="_blank">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                    {% endif %}
+                    {% if about.twitter_profile %}
+                    <a href="{{ about.twitter_profile }}" class="btn btn-outline-info" target="_blank">
+                        <i class="fab fa-twitter"></i> Twitter
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<style>
+    .hover-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .hover-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+</style>
+{% endblock %}

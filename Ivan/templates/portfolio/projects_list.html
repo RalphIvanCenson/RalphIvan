@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}All Projects{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">All Projects</h1>
+    
+    {% if projects %}
+    <div class="row">
+        {% for project in projects %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-briefcase text-secondary" style="font-size: 3rem;"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ project.title }}</h5>
+                    <p class="card-text text-muted">{{ project.description|truncatewords:20 }}</p>
+                    {% if project.technologies %}
+                    <div class="mb-3">
+                        <span class="badge bg-info">{{ project.technologies }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'portfolio:project_detail' project.id %}" class="btn btn-sm btn-primary">
+                        View Details
+                    </a>
+                    {% if project.github_link %}
+                    <a href="{{ project.github_link }}" class="btn btn-sm btn-outline-dark" target="_blank">
+                        <i class="fab fa-github"></i> Code
+                    </a>
+                    {% endif %}
+                    {% if project.link %}
+                    <a href="{{ project.link }}" class="btn btn-sm btn-outline-success" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Live
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle"></i> No projects found.
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .hover-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .hover-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+</style>
+{% endblock %}

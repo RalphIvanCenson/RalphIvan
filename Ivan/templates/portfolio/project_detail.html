@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="mb-3">{{ project.title }}</h1>
+            <p class="text-muted">
+                <i class="fas fa-calendar"></i> Created: {{ project.date_created|date:"F d, Y" }}
+            </p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <a href="{% url 'portfolio:projects' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Projects
+            </a>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <div class="bg-light rounded mb-4 d-flex align-items-center justify-content-center" style="height: 500px;">
+                <i class="fas fa-briefcase text-secondary" style="font-size: 5rem;"></i>
+            </div>
+
+            <h2 class="mb-3">Project Description</h2>
+            <p class="lead">{{ project.description }}</p>
+
+            {% if project.technologies %}
+            <h3 class="mb-3">Technologies Used</h3>
+            <div class="mb-4">
+                <span class="badge bg-info fs-6 me-2 mb-2">{{ project.technologies }}</span>
+            </div>
+            {% endif %}
+
+            <div class="mt-4">
+                {% if project.link %}
+                <a href="{{ project.link }}" class="btn btn-success btn-lg me-2" target="_blank">
+                    <i class="fas fa-globe"></i> View Live Project
+                </a>
+                {% endif %}
+                {% if project.github_link %}
+                <a href="{{ project.github_link }}" class="btn btn-dark btn-lg" target="_blank">
+                    <i class="fab fa-github"></i> View Source Code
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Project Details</h5>
+                    <hr>
+                    <p class="text-muted mb-1">Date Created</p>
+                    <p class="mb-3">{{ project.date_created|date:"F d, Y" }}</p>
+                    
+                    <p class="text-muted mb-1">Tech Stack</p>
+                    <p class="mb-3">
+                        {% if project.technologies %}
+                            {{ project.technologies|truncatewords:10 }}
+                        {% else %}
+                            <span class="text-muted">Not specified</span>
+                        {% endif %}
+                    </p>
+
+                    {% if project.link %}
+                    <hr>
+                    <p class="text-muted mb-1">Live Demo</p>
+                    <p>
+                        <a href="{{ project.link }}" target="_blank" class="text-decoration-none">
+                            Visit Website <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </p>
+                    {% endif %}
+
+                    {% if project.github_link %}
+                    <hr>
+                    <p class="text-muted mb-1">GitHub Repository</p>
+                    <p>
+                        <a href="{{ project.github_link }}" target="_blank" class="text-decoration-none">
+                            View Code <i class="fab fa-github"></i>
+                        </a>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if related_projects %}
+    <section class="py-5 border-top">
+        <h2 class="mb-4">Related Projects</h2>
+        <div class="row">
+            {% for related in related_projects %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm hover-card">
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-briefcase text-secondary" style="font-size: 3rem;"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ related.title }}</h5>
+                        <p class="card-text text-muted">{{ related.description|truncatewords:15 }}</p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a href="{% url 'portfolio:project_detail' related.id %}" class="btn btn-sm btn-primary">
+                            View Project
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+
+<style>
+    .hover-card {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .hover-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+    }
+</style>
+{% endblock %}
