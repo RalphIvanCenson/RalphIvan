@@ -1,33 +1,25 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Portfolio Home{% endblock %}
+{% block title %}Ralph Ivan T Censon - Portfolio{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
 <section class="hero-section bg-gradient text-white py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
     <div class="container py-5">
         <div class="row align-items-center">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <h1 class="display-4 fw-bold mb-3">Welcome to My Portfolio</h1>
-                {% if about %}
-                <p class="lead mb-4">{{ about.bio|truncatewords:30 }}</p>
+                <h2 class="h4 text-white-50 mb-4">Hello! I'm Ralph Ivan T Censon</h2>
+                <p class="lead mb-4">I enjoy creating and learning modern, responsive, and user-friendly websites and applications. I am always eager to improve my skills.</p>
                 <div class="d-flex gap-3">
-                    {% if about.resume_link %}
-                    <a href="{{ about.resume_link }}" class="btn btn-light btn-lg" target="_blank">
-                        <i class="fas fa-download"></i> Download Resume
+                    <a href="mailto:ralphivan2005@gmail.com" class="btn btn-light btn-lg">
+                        <i class="fas fa-envelope"></i> Send Email
                     </a>
-                    {% endif %}
                     <a href="{% url 'portfolio:projects' %}" class="btn btn-outline-light btn-lg">
                         View Projects
                     </a>
                 </div>
-                {% else %}
-                <p class="lead mb-4">Showcasing my best work and skills</p>
-                <a href="{% url 'portfolio:projects' %}" class="btn btn-light btn-lg">
-                    View Projects
-                </a>
-                {% endif %}
             </div>
         </div>
     </div>
@@ -81,88 +73,72 @@
 <section class="py-5 bg-light">
     <div class="container">
         <h2 class="text-center mb-4">Skills</h2>
-        {% if skills %}
         <div class="row">
-            {% regroup skills by category as skills_by_category %}
-            {% for category in skills_by_category %}
             <div class="col-md-6 mb-4">
-                <h5 class="mb-3">{{ category.grouper }}</h5>
-                {% for skill in category.list|slice:":5" %}
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>{{ skill.name }}</span>
-                        <span class="text-muted">{{ skill.proficiency_percentage }}%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ skill.proficiency_percentage }}%" 
-                             aria-valuenow="{{ skill.proficiency_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                </div>
-                {% endfor %}
+                <h5 class="mb-3"><i class="fas fa-code"></i> Front-End Development</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item border-0 ps-0">HTML - Building responsive and interactive web pages</li>
+                    <li class="list-group-item border-0 ps-0">Figma - Designing responsive and interactive web pages</li>
+                </ul>
             </div>
-            {% endfor %}
+            <div class="col-md-6 mb-4">
+                <h5 class="mb-3"><i class="fas fa-code-branch"></i> Version Control</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item border-0 ps-0">Git & GitHub - Version control and collaboration</li>
+                </ul>
+            </div>
         </div>
-        <div class="text-center mt-4">
-            <a href="{% url 'portfolio:skills' %}" class="btn btn-primary">View All Skills</a>
-        </div>
-        {% else %}
-        <p class="text-center text-muted">No skills added yet.</p>
-        {% endif %}
     </div>
 </section>
 
-<!-- About Section -->
-{% if about %}
+<!-- About Me Section -->
 <section class="py-5" id="about">
     <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h2 class="mb-4">{{ about.title }}</h2>
-                <p class="lead">{{ about.bio }}</p>
+        <h2 class="mb-4">About Me</h2>
+        <div class="row">
+            <div class="col-md-8">
+                <h3 class="mb-3">Ralph Ivan T Censon</h3>
+                <p class="lead">I enjoy creating and learning modern, responsive, and user-friendly websites and applications. I am always eager to improve my skills.</p>
                 
-                <div class="row mt-4">
-                    {% if about.email %}
+                <h4 class="mt-4 mb-3">Personal Information</h4>
+                <div class="row">
                     <div class="col-md-6 mb-3">
-                        <strong><i class="fas fa-envelope"></i> Email:</strong>
-                        <a href="mailto:{{ about.email }}">{{ about.email }}</a>
+                        <strong><i class="fas fa-graduation-cap"></i> Education:</strong>
+                        <p>BSIT (Bachelor of Science in Information Technology)</p>
+                        <p class="small text-muted">STI College Sta Maria Section: BT 2-102</p>
                     </div>
-                    {% endif %}
-                    {% if about.phone %}
                     <div class="col-md-6 mb-3">
-                        <strong><i class="fas fa-phone"></i> Phone:</strong>
-                        {{ about.phone }}
+                        <strong><i class="fas fa-birthday-cake"></i> Birthday:</strong>
+                        <p>February 11, 2005</p>
+                        <p class="small text-muted">Age: 20 years old</p>
                     </div>
-                    {% endif %}
-                    {% if about.location %}
-                    <div class="col-md-6 mb-3">
-                        <strong><i class="fas fa-map-marker-alt"></i> Location:</strong>
-                        {{ about.location }}
-                    </div>
-                    {% endif %}
                 </div>
 
-                <div class="mt-4">
-                    {% if about.github_profile %}
-                    <a href="{{ about.github_profile }}" class="btn btn-outline-dark me-2" target="_blank">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                    {% endif %}
-                    {% if about.linkedin_profile %}
-                    <a href="{{ about.linkedin_profile }}" class="btn btn-outline-info me-2" target="_blank">
-                        <i class="fab fa-linkedin"></i> LinkedIn
-                    </a>
-                    {% endif %}
-                    {% if about.twitter_profile %}
-                    <a href="{{ about.twitter_profile }}" class="btn btn-outline-info" target="_blank">
-                        <i class="fab fa-twitter"></i> Twitter
-                    </a>
-                    {% endif %}
+                <h4 class="mt-4 mb-3">Hobbies & Interests</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-gamepad"></i> Playing Online Games</li>
+                            <li><i class="fas fa-road"></i> Road Trips</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-tv"></i> Watching Anime</li>
+                            <li><i class="fas fa-music"></i> Listening to Music</li>
+                        </ul>
+                    </div>
                 </div>
+
+                <h4 class="mt-4 mb-3">Contact Me</h4>
+                <p>If you want to get in touch, feel free to reach out!</p>
+                <a href="mailto:ralphivan2005@gmail.com" class="btn btn-primary btn-lg">
+                    <i class="fas fa-envelope"></i> Send Email
+                </a>
             </div>
         </div>
     </div>
 </section>
-{% endif %}
 
 <style>
     .hover-card {
